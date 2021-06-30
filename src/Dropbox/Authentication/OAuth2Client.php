@@ -182,4 +182,27 @@ class OAuth2Client
         //Revoke Access Token
         $this->getClient()->sendRequest($request);
     }
+
+    public function refreshAccessToken(string $refresh_token, string $grant_type = 'refresh_token'): array {
+
+        $params = [
+            'refresh_token' => $refresh_token,
+            'grant_type' => $grant_type,
+            'client_id' => $this->getApp()->getClientId(),
+            'client_secret' => $this->getApp()->getClientSecret()
+        ];
+
+        $params = http_build_query($params);
+
+        $apiUrl = static::AUTH_TOKEN_URL;
+        $uri = $apiUrl . "?" . $params;
+
+        $response = $this->getClient()
+            ->getHttpClient()
+            ->send($uri, "POST", null);
+
+        $body = $response->getBody();
+
+        return json_decode((string) $body, true);
+    }
 }

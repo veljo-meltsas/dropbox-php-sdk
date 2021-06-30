@@ -237,6 +237,19 @@ class DropboxAuthHelper
     }
 
     /**
+     * Refresh Access Token
+     *
+     * @param  string $refreshToken refresh token
+     *
+     * @return \Kunnu\Dropbox\Models\AccessToken
+     */
+    public function refreshAccessToken($refreshToken)
+    {
+        $accessToken = $this->getOAuth2Client()->refreshAccessToken($refreshToken);
+        return new AccessToken($accessToken);
+    }
+
+    /**
      * Get URL State
      *
      * @return string
